@@ -1,0 +1,59 @@
+-- Laden der externen Bibliothek
+local Library = loadstring(Game:HttpGet("https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/wizard"))()
+
+-- Fenstername geändert zu "Be a car"
+local PhantomForcesWindow = Library:NewWindow("Be a car")
+
+local KillingCheats = PhantomForcesWindow:NewSection("Main")
+
+-- Funktion zum Starten und Stoppen von Drive & FirstBoost
+local driveRunning = false
+local function startDriveLoop()
+    while driveRunning do
+        -- Drive-Befehl
+        local args1 = {
+            [1] = "Drive"
+        }
+        game:GetService("ReplicatedStorage").Signal.Car:FireServer(unpack(args1))
+
+        -- FirstBoost-Befehl
+        local args2 = {
+            [1] = "FirstBoost",
+            [2] = -0.31371964572618516
+        }
+        game:GetService("ReplicatedStorage").Signal.Car:FireServer(unpack(args2))
+
+        task.wait(0.01) -- Schnellere Wiederholung (10 ms Verzögerung)
+    end
+end
+
+-- Toggle für Drive & Boost
+KillingCheats:CreateToggle("Auto Drive & Boost", function(value)
+    driveRunning = value
+    if value then
+        print("Starte Auto Drive & Boost (schneller).")
+        spawn(startDriveLoop) -- Starte die Schleife in einem separaten Thread
+    else
+        print("Auto Drive & Boost gestoppt.")
+    end
+end)
+
+-- Button für "Upgrade Ramp"
+KillingCheats:CreateButton("Upgrade Ramp", function()
+    local args = {
+        [1] = "Upgrade",
+        [2] = "Ramp"
+    }
+    game:GetService("ReplicatedStorage").Signal.Place:FireServer(unpack(args))
+    print("Ramp wurde erfolgreich upgegradet!")
+end)
+
+-- Button für "Upgrade Car"
+KillingCheats:CreateButton("Upgrade Car", function()
+    local args = {
+        [1] = "Upgrade",
+        [2] = "Car"
+    }
+    game:GetService("ReplicatedStorage").Signal.Place:FireServer(unpack(args))
+    print("Car wurde erfolgreich upgegradet!")
+end)
